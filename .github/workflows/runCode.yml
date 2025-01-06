@@ -1,8 +1,9 @@
 name: RunApp
+
 on:
   workflow_run:
     workflows: [RunTest]
-    branches:
+    branches: 
       - '*'
     types:
       - completed
@@ -10,20 +11,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-    steps:
+        
       - name: Build image
         run: |
-          if [ $? -eq 0 ]; then
-            docker build --target prod -t parser-app-prod .
-          fi
+          docker build --target prod -t parser-app-prod .
 
       - name: Run the container
         run: |
-          if [ $? -eq 0 ]; then
-            docker run parser-app-prod
-          fi
+          docker run parser-app-prod
