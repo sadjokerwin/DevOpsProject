@@ -5,6 +5,8 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -14,8 +16,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Build and Run Tests
+        run: |
+          docker build --target test -t parser-app-test .
+          docker run --rm parser-app-test
+
       - name: Build image
-        run: docker build -t parser-app .
+        run: |
+          if: success()
+          docker build --target prod -t parser-app-prod .
 
       - name: Run the container
-        run: docker run parser-app
+        run: |
+          if: success()
+          docker run parser-app-prod
