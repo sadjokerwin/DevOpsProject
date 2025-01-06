@@ -1,22 +1,25 @@
 name: RunApp
 on:
   workflow_run:
-      workflows: [RunTest]
-      branches: 
-         - '*'
-      types:
-        - completed
+    workflows: [RunTest]
+    branches:
+      - '*'
+    types:
+      - completed
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    steps:
       - name: Build image
         run: |
-          if: success()
-          docker build --target prod -t parser-app-prod .
+          if [ $? -eq 0 ]; then
+            docker build --target prod -t parser-app-prod .
+          fi
 
       - name: Run the container
         run: |
-          if: success()
-          docker run parser-app-prod
+          if [ $? -eq 0 ]; then
+            docker run parser-app-prod
+          fi
