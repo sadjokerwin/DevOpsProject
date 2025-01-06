@@ -1,4 +1,4 @@
-name: Run Docker Image in Github
+name: RunTest 
 
 on:
   push:
@@ -21,12 +21,3 @@ jobs:
           docker build --target test -t parser-app-test .
           docker run --rm parser-app-test
 
-      - name: Build image
-        run: |
-          if: success()
-          docker build --target prod -t parser-app-prod .
-
-      - name: Run the container
-        run: |
-          if: success()
-          docker run parser-app-prod
