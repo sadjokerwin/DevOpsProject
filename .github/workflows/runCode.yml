@@ -3,7 +3,7 @@ on:
   workflow_run:
       workflows: [RunTest]
       branches: 
-        - main
+         - '*'
       types:
         - completed
 
