@@ -9,8 +9,6 @@ COPY /src/main.py ./tests
 
 FROM base AS test
 RUN pip install pytest
-# CMD ["pwd"]
-# CMD ["ls", "tests"]
 CMD ["pytest"]
 
 FROM base AS prod
