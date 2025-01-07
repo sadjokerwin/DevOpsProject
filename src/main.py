@@ -1,7 +1,6 @@
 import csv
 import os
 
-BILLION = 1000000000
 YEAR_OFFSET = -4
 
 def parse_spotify_songs(filePath):
@@ -29,23 +28,33 @@ def get_songs_by_artist(songs, artist):
 
 def get_songs_by_year(songs, year):
     songsByYear = []
-    print(year)
     for song in songs:
         if int(song['Release Date'][YEAR_OFFSET:]) == year:
             songsByYear.append(song)
+            print(song)
     return songsByYear
 
-def get_billions_songs(songs):
+def sort_artists_by_number_of_songs(songs):
+    artists = {}
+    for song in songs:
+        if song['Artist'] in artists:
+            artists[song['Artist']] += 1
+        else:
+            artists[song['Artist']] = 1
+    return dict(sorted(artists.items(), key=lambda item: item[1], reverse=True))
+
+def get_songs_above_given_streams(songs, streams):
     billionsSongs = []
     for song in songs:
         songCopy = song['Spotify Streams'].replace(',', '')
-        if  songCopy.isdigit() and int(songCopy) >= BILLION:
+        if  songCopy.isdigit() and int(songCopy) >= streams:
             billionsSongs.append(song)
     return billionsSongs
 
 if __name__ == "__main__":
     filePath = "data.csv"
     songsResult = parse_spotify_songs(filePath)
-    print(get_songs_by_artist(songsResult, "The Weeknd"))
-    print(get_songs_by_year(songsResult, 2022))
-    print(get_billions_songs(songsResult))
+    # print(get_songs_by_artist(songsResult, "The Weeknd"))
+    # print(get_songs_by_year(songsResult, 2022))
+    print(get_songs_above_given_streams(songsResult, 1000000000))
+    # print(sort_artists_by_number_of_songs(songsResult))
