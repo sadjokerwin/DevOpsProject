@@ -4,8 +4,9 @@ WORKDIR /app
 
 COPY /src/main.py .
 COPY /data_files/data.csv .
-COPY /test/ ./tests
-COPY /src/main.py ./tests
+COPY /test ./tests
+
+ENV PYTHONPATH=/app
 
 FROM base AS test
 RUN pip install pytest

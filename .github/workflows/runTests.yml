@@ -16,8 +16,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: python3 -m pip install pylint
+
+      - name: Run Lintian check
+        run: pylint src --exit-zero
+
       - name: Build and Run Tests
         run: |
           docker build --target test -t parser-app-test .
           docker run --rm parser-app-test
+
+      - name: Static Code Analysis
+        run: bandit -r src/
+
+      - name: Build Docker Image
+        run: docker build -t my-app .
+
+      - name: Scan Docker Image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: my-app
 
