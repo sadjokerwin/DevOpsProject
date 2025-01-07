@@ -2,9 +2,10 @@ FROM python:3.10-slim AS base
 
 WORKDIR /app
 
-COPY /src/main.py /app
-COPY /data_files/data.csv /app
+COPY /src/main.py .
+COPY /data_files/data.csv .
 COPY /test/ ./tests
+COPY /src/main.py ./tests
 
 FROM base AS test
 RUN pip install pytest
