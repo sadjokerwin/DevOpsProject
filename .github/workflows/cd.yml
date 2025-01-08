@@ -36,3 +36,28 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
+      - name: Start miniKube
+        uses: medyagh/setup-minikube@master
+
+      - name: Get pods
+        run: kubectl get pods
+
+      - name: Pull Docker Image
+        run: |
+          docker pull viksun02/devops-project-collab:latest
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f kubernetes/
+
+      - name: Run Kube-Hunter in Passive Mode
+        run: |
+          docker run --rm aquasec/kube-hunter --passive
+
+      - name: Check kubernetes status
+        run: kubectl get all
+      
+      - name: Stop the minicube
+        run: minikube stop
+      

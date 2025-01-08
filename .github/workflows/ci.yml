@@ -23,10 +23,24 @@ jobs:
       - name: Run Lintian check
         run: pylint src --exit-zero
 
+  gitleaks-scan:
+    name: GitLeaks Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2.3.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   static-analysis:
     name: Perform Static Analysis
     runs-on: ubuntu-latest
-    needs: lint
+    needs: [lint, gitleaks-scan]
     
     steps:
       - name: Checkout code
@@ -37,7 +51,7 @@ jobs:
 
       - name: Static Code Analysis
         run: bandit -r src/
-      
+            
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
