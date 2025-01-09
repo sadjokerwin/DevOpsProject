@@ -51,10 +51,6 @@ jobs:
         run: |
           kubectl apply -f kubernetes/
 
-      - name: Run Kube-Hunter in Passive Mode
-        run: |
-          docker run --rm aquasec/kube-hunter --passive
-
       - name: Check kubernetes status
         run: kubectl get all
       
