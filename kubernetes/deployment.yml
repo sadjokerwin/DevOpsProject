@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spotify-parser-deployment
+  labels:
+    app: spotify-parser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spotify-parser
+  template:
+    metadata:
+      labels:
+        app: spotify-parser
+    spec:
+      containers:
+        - name: spotify-parser
+          image: spotify-parser:latest
+          ports:
+            - containerPort: 8080

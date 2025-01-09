@@ -1,7 +1,13 @@
 import csv
 import os
+from flask import Flask, jsonify
+
+app = Flask(__name__)
 
 YEAR_OFFSET = -4
+PORT = 8080
+IP_ADDRESS = '127.0.0.1'
+
 
 def parse_spotify_songs(filePath):
     songs = []
@@ -51,10 +57,12 @@ def get_songs_above_given_streams(songs, streams):
             billionsSongs.append(song)
     return billionsSongs
 
-if __name__ == "__main__":
-    filePath = "data.csv"
+@app.route('/songs/above/<int:streams>', methods=['GET'])
+def get_songs(streams):
+    filePath = "data.csv"  
     songsResult = parse_spotify_songs(filePath)
-    # print(get_songs_by_artist(songsResult, "The Weeknd"))
-    # print(get_songs_by_year(songsResult, 2022))
-    print(get_songs_above_given_streams(songsResult, 1000000000))
-    # print(sort_artists_by_number_of_songs(songsResult))
+    result = get_songs_above_given_streams(songsResult, streams)
+    return jsonify(result) 
+
+if __name__ == "__main__":
+    app.run(host=IP_ADDRESS, port=PORT)
