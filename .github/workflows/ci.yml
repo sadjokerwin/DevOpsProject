@@ -66,6 +66,16 @@ jobs:
           docker build --target test -t parser-app-test .
           docker run --rm parser-app-test
 
+  security:
+   name: Security Scan
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@master
+     - name: Run Snyk to check for vulnerabilities
+       uses: snyk/actions/python@master
+       env:
+         SNYK_TOKEN: ${{ secrets.SNYK }}
+
   build-and-scan:
     name: Build and scan Docker image
     runs-on: ubuntu-latest
